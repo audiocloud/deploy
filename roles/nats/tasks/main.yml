@@ -6,6 +6,6 @@
   when: ansible_os_family == "Darwin"
 ## Start NATS
 - name: Start NATS
-  command:
+  ansible.builtin.command:
     cmd: brew services start nats-server
   when: ansible_os_family == "Darwin"

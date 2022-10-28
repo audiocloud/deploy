@@ -3,7 +3,7 @@
     path: "{{ domain_server_path }}"
     state: directory
     mode: 0755
-    recurse: yes
+    recurse: true
     owner: "{{ ansible_user }}"
   become: true
 - name: Stat audiocloud directory

@@ -1,6 +1,6 @@
 # Reload the instance driver systemd unit file
 - name: Reload instance driver
-  ansible.builting.service:
+  ansible.builtin.service:
     name: audiocloud_instance_driver
     state: reloaded
   become: true
@@ -8,7 +8,7 @@
 
 # Restart the instance driver with launchctl
 - name: Restart instance driver
-  ansible.builting.service:
+  ansible.builtin.service:
     name: audiocloud_instance_driver
     state: restarted
   become: true

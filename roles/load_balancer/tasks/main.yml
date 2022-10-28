@@ -5,19 +5,19 @@
     state: present
   when: ansible_os_family == "Darwin"
 - name: Generate main config
-  template:
+  ansible.builtin.template:
     src: traefik.toml.j2
     dest: /opt/homebrew/etc/traefik/traefik.toml
     mode: 0644
   notify: Restart traefik
 - name: Generate dashboard site config
-  template:
+  ansible.builtin.template:
     src: dashboard.toml.j2
     dest: /opt/homebrew/etc/traefik/sites/dashboard.toml
     mode: 0644
   notify: Restart traefik
 - name: Generate domain server config
-  template:
+  ansible.builtin.template:
     src: domain-server.toml.j2
     dest: /opt/homebrew/etc/traefik/sites/audiocloud-domain-server.toml
     mode: 0644

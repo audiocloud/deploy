@@ -3,7 +3,7 @@
     path: "{{ audio_engine_path }}"
     state: directory
     mode: 0755
-    recurse: yes
+    recurse: true
     owner: "{{ ansible_user }}"
   become: true
 - name: Create audio engine shared root directory
@@ -11,7 +11,7 @@
     path: "{{ audio_engine_shared_media_root }}"
     state: directory
     mode: 0755
-    recurse: yes
+    recurse: true
     owner: "{{ ansible_user }}"
   become: true
 - name: Stat audiocloud directory
@@ -24,5 +24,6 @@
     dest: "{{ audio_engine_path }}/audio_engine.config.js"
     mode: 0644
   notify: Restart audio engine
-- include_tasks: darwin.yml
+- name: Include macOS specific tasks
+  ansible.builtin.include_tasks: darwin.yml
   when: ansible_os_family == "Darwin"

@@ -1,6 +1,6 @@
 galaxy_info:
   author: Bojan Šernek
-  description: Audiocloud public load balancer role (traefik)
+  description: Audiocloud Audio common setup for all roles
   company: Distopik Ltd.
   license: MIT
   min_ansible_version: "2.10"
@@ -8,6 +8,3 @@ galaxy_info:
     - name: Windows
     - name: GenericLinux
     - name: macOS
-
-dependencies:
-  - role: common

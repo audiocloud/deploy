@@ -3,12 +3,20 @@
   ansible.builtin.get_url:
     url: https://www.reaper.fm/files/{{ str(audio_engine_reaper_version)[0] }}.x/reaper{{ audio_engine_reaper_version }}_universal.dmg
     dest: "{{ audio_engine_path }}/REAPER.dmg"
+    mode: 0644
+  when: audio_engine_path_stat.stat.isdir is defined
+
+- name: Create temporary directory
+  ansible.builtin.file:
+    path: "{{ audio_engine_path }}/reaper-src"
+    state: directory
+    mode: 0755
   when: audio_engine_path_stat.stat.isdir is defined
 
 # Mount the REAPER DMG and copy its contents to the audio engine destination directory.
 - name: Mount and copy REAPER DMG
   ansible.builtin.shell: |
-    mkdir -p ./reaper-src
+    set -o pipefail
     yes y | hdiutil attach  -nobrowse -noverify -noautoopen -mountpoint ./reaper-src "{{ audio_engine_path }}/REAPER.dmg"
     cp -aR ./reaper-src/REAPER.app "{{ audio_engine_path }}/"
     chown -R {{ ansible_user_id }} "{{ audio_engine_path }}/REAPER.app"
@@ -22,7 +30,7 @@
   ansible.builtin.copy:
     src: "{{ audio_engine_reaper_license }}"
     dest: "{{ audio_engine_path }}/"
-  become: true
+    mode: 0644
   when: audio_engine_path_stat.stat.isdir is defined and audio_engine_reaper_license is defined
 
 # Download audio engine plugin binary and copy it into the reaper directory

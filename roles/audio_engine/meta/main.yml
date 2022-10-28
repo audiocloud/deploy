@@ -1,2 +1,13 @@
+galaxy_info:
+  author: Bojan Šernek
+  description: Audiocloud Audio engine role
+  company: Distopik Ltd.
+  license: MIT
+  min_ansible_version: "2.10"
+  platforms:
+    - name: Windows
+    - name: GenericLinux
+    - name: macOS
+
 dependencies:
   - role: common

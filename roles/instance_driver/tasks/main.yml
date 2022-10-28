@@ -3,16 +3,19 @@
     path: "{{ instance_driver_path }}"
     state: directory
     mode: 0755
-    recurse: yes
+    recurse: true
     owner: "{{ ansible_user }}"
   become: true
 - name: Stat audiocloud directory
   ansible.builtin.stat:
     path: "{{ instance_driver_path }}"
   register: instance_driver_path_stat
-- import_tasks: download_unix.yml
+- name: Import file download tasks for UNIX platforms
+  ansible.builtin.import_tasks: download_unix.yml
   when: ansible_os_family != "Windows"
-- import_tasks: linux.yml
+- name: Import Linux tasks
+  ansible.builtin.import_tasks: linux.yml
   when: ansible_os_family == "Linux"
-- import_tasks: darwin.yml
+- name: Import macOS tasks
+  ansible.builtin.import_tasks: darwin.yml
   when: ansible_os_family == "Darwin"
