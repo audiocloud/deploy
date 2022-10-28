@@ -1,0 +1,6 @@
+## instanll NodeJS and homebrew
+- name: Install NodeJS
+  community.general.homebrew:
+    name: nodejs
+    state: present
+  when: ansible_os_family == "Darwin"

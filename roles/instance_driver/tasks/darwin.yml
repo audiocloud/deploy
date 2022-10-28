@@ -1,0 +1,10 @@
+- name: Generate launchd config
+  ansible.builtin.template:
+    src: io.audiocloud.instance_driver.plist.j2
+    dest: "{{ home }}/Library/LaunchAgents/io.audiocloud.instance_driver.plist"
+    mode: 0644
+  become: true
+  when: instance_driver_path_stat.stat.isdir is defined
+  notify:
+    - Reload instance driver
+    - Restart instance driver

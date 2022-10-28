@@ -1,0 +1,4 @@
+- name: Restart domain server
+  ansible.builtin.command:
+    cmd: |
+      pm2 startOrReload "{{ domain_server_path }}/domain_server.config.js"

@@ -1,0 +1,28 @@
+- name: Create audiocloud directory
+  ansible.builtin.file:
+    path: "{{ audio_engine_path }}"
+    state: directory
+    mode: 0755
+    recurse: yes
+    owner: "{{ ansible_user }}"
+  become: true
+- name: Create audio engine shared root directory
+  ansible.builtin.file:
+    path: "{{ audio_engine_shared_media_root }}"
+    state: directory
+    mode: 0755
+    recurse: yes
+    owner: "{{ ansible_user }}"
+  become: true
+- name: Stat audiocloud directory
+  ansible.builtin.stat:
+    path: "{{ audio_engine_path }}"
+  register: audio_engine_path_stat
+- name: Update ecosystem file
+  ansible.builtin.template:
+    src: audio_engine.config.js.j2
+    dest: "{{ audio_engine_path }}/audio_engine.config.js"
+    mode: 0644
+  notify: Restart audio engine
+- include_tasks: darwin.yml
+  when: ansible_os_family == "Darwin"

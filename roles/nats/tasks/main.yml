@@ -1,0 +1,10 @@
+## Install NATS
+- name: Install NATS
+  community.general.homebrew:
+    name: nats-server
+    state: present
+  when: ansible_os_family == "Darwin"
+- name: Start NATS
+  command:
+    cmd: brew services start nats-server
+  when: ansible_os_family == "Darwin"

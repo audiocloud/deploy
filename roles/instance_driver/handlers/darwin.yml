@@ -1,0 +1,11 @@
+- name: Reload instance driver
+  ansible.builtin.shell: |
+    launchctl load -w "{{ home }}/Library/LaunchAgents/io.audiocloud.instance_driver.plist"
+  become: true
+  when: instance_driver_path_stat.stat.isdir is defined
+- name: Restart instance driver
+  community.general.launchd:
+    name: io.audiocloud.instance_driver
+    state: restarted
+  become: true
+  when: instance_driver_path_stat.stat.isdir is defined

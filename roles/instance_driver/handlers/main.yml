@@ -1,0 +1,4 @@
+- include: darwin.yml
+  when: ansible_os_family == "Darwin"
+- include: linux.yml
+  when: ansible_os_family == "Linux"

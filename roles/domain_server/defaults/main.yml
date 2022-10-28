@@ -1,0 +1,5 @@
+domain_server_path: /opt/audiocloud
+domain_server_version: "{{ audiocloud_version }}"
+domain_server_nats_url: nats://localhost:4222
+domain_server_rust_log: info,sqlx=warn,actix_server=warn
+domain_server_extra_env: { }

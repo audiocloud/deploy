@@ -1,0 +1,23 @@
+- name: Create audiocloud directory
+  ansible.builtin.file:
+    path: "{{ instance_driver_path }}"
+    state: directory
+    mode: 0755
+    recurse: yes
+    owner: "{{ ansible_user }}"
+  become: true
+- name: Stat audiocloud directory
+  ansible.builtin.stat:
+    path: "{{ instance_driver_path }}"
+  register: instance_driver_path_stat
+- name: Download binary
+  ansible.builtin.get_url:
+    url: "https://github.com/audiocloud/audiocloud/releases/download/{{ instance_driver_version }}/audiocloud_driver-{{ rust_triple }}"
+    dest: "{{ instance_driver_path }}/audiocloud_driver"
+    mode: 0755
+  when: instance_driver_path_stat.stat.isdir is defined
+  notify: Restart instance driver
+- import_tasks: linux.yml
+  when: ansible_os_family == "Linux"
+- import_tasks: darwin.yml
+  when: ansible_os_family == "Darwin"

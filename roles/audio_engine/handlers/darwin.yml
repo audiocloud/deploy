@@ -1,0 +1,5 @@
+- name: Restart audio engine
+  community.general.launchd:
+    name: io.audiocloud.audio_engine
+    state: restarted
+  become: true

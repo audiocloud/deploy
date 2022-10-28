@@ -1,0 +1,33 @@
+- name: Download REAPER DMG
+  ansible.builtin.get_url:
+    url: https://www.reaper.fm/files/6.x/reaper668_universal.dmg
+    dest: "{{ audio_engine_path }}/REAPER.dmg"
+  when: audio_engine_path_stat.stat.isdir is defined
+- name: Mount and copy REAPER DMG
+  ansible.builtin.shell: |
+    mkdir -p ./reaper-src
+    yes y | hdiutil attach  -nobrowse -noverify -noautoopen -mountpoint ./reaper-src "{{ audio_engine_path }}/REAPER.dmg"
+    cp -aR ./reaper-src/REAPER.app "{{ audio_engine_path }}/"
+    chown -R {{ ansible_user_id }} "{{ audio_engine_path }}/REAPER.app"
+    hdiutil detach ./reaper-src
+  become: true
+  when: audio_engine_path_stat.stat.isdir is defined
+- name: Download binary
+  ansible.builtin.get_url:
+    url: https://github.com/audiocloud/audiocloud/releases/download/{{ audio_engine_version }}/audiocloud_reaper_plugin-{{ rust_triplet }}
+    dest: "{{ audio_engine_path }}/REAPER.app/Contents/Plugins/FX/ac_streaming_plugin.vst.dylib"
+    mode: 0755
+  when: audio_engine_path_stat.stat.isdir is defined
+  notify: Restart audio engine
+- name: Generate launchd config
+  ansible.builtin.template:
+    src: io.audiocloud.audio_engine.plist.j2
+    dest: "{{ home }}/Library/LaunchAgents/io.audiocloud.audio_engine.plist"
+    mode: 0644
+  become: true
+  when: audio_engine_path_stat.stat.isdir is defined
+- name: Reload launchd config
+  ansible.builtin.shell: |
+    launchctl load -w "{{ home }}/Library/LaunchAgents/io.audiocloud.audio_engine.plist"
+  become: true
+  when: audio_engine_path_stat.stat.isdir is defined

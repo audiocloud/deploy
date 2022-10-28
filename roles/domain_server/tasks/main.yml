@@ -1,0 +1,31 @@
+- name: Create audiocloud directory
+  ansible.builtin.file:
+    path: "{{ domain_server_path }}"
+    state: directory
+    mode: 0755
+    recurse: yes
+    owner: "{{ ansible_user }}"
+  become: true
+- name: Stat audiocloud directory
+  ansible.builtin.stat:
+    path: "{{ domain_server_path }}"
+  register: domain_server_path_stat
+- name: Update config file
+  ansible.builtin.template:
+    src: config.yaml.j2
+    dest: "{{ domain_server_path }}/config.yaml"
+    mode: 0644
+  notify: Restart domain server
+- name: Update ecosystem file
+  ansible.builtin.template:
+    src: domain_server.config.js.j2
+    dest: "{{ domain_server_path }}/domain_server.config.js"
+    mode: 0644
+  notify: Restart domain server
+- name: Download binary
+  ansible.builtin.get_url:
+    url: https://github.com/audiocloud/audiocloud/releases/download/{{ domain_server_version }}/audiocloud_domain_server-aarch64-apple-darwin
+    dest: "{{ domain_server_path }}/audiocloud_domain_server"
+    mode: 0755
+  when: domain_server_path_stat.stat.isdir is defined
+  notify: Restart domain server
