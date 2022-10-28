@@ -1,17 +1,31 @@
+# Download specified REAPER package from reaper.fm and install it.
 - name: Download REAPER DMG
   ansible.builtin.get_url:
-    url: https://www.reaper.fm/files/6.x/reaper668_universal.dmg
+    url: https://www.reaper.fm/files/{{ str(audio_engine_reaper_version)[0] }}.x/reaper{{ audio_engine_reaper_version }}_universal.dmg
     dest: "{{ audio_engine_path }}/REAPER.dmg"
   when: audio_engine_path_stat.stat.isdir is defined
+
+# Mount the REAPER DMG and copy its contents to the audio engine destination directory.
 - name: Mount and copy REAPER DMG
   ansible.builtin.shell: |
     mkdir -p ./reaper-src
     yes y | hdiutil attach  -nobrowse -noverify -noautoopen -mountpoint ./reaper-src "{{ audio_engine_path }}/REAPER.dmg"
     cp -aR ./reaper-src/REAPER.app "{{ audio_engine_path }}/"
     chown -R {{ ansible_user_id }} "{{ audio_engine_path }}/REAPER.app"
+    touch reaper.ini
     hdiutil detach ./reaper-src
   become: true
   when: audio_engine_path_stat.stat.isdir is defined
+
+# Install reaper-license.rk if it was specified
+- name: Install REAPER license
+  ansible.builtin.copy:
+    src: "{{ audio_engine_reaper_license }}"
+    dest: "{{ audio_engine_path }}/"
+  become: true
+  when: audio_engine_path_stat.stat.isdir is defined and audio_engine_reaper_license is defined
+
+# Download audio engine plugin binary and copy it into the reaper directory
 - name: Download binary
   ansible.builtin.get_url:
     url: https://github.com/audiocloud/audiocloud/releases/download/{{ audio_engine_version }}/audiocloud_reaper_plugin-{{ rust_triplet }}
@@ -19,6 +33,8 @@
     mode: 0755
   when: audio_engine_path_stat.stat.isdir is defined
   notify: Restart audio engine
+
+# Generate launchd configuration file that will start the audio engine on boot
 - name: Generate launchd config
   ansible.builtin.template:
     src: io.audiocloud.audio_engine.plist.j2
@@ -26,8 +42,6 @@
     mode: 0644
   become: true
   when: audio_engine_path_stat.stat.isdir is defined
-- name: Reload launchd config
-  ansible.builtin.shell: |
-    launchctl load -w "{{ home }}/Library/LaunchAgents/io.audiocloud.audio_engine.plist"
-  become: true
-  when: audio_engine_path_stat.stat.isdir is defined
+  notify:
+    - Reload audio engine
+    - Restart audio engine

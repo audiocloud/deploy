@@ -1,7 +1,0 @@
----
-# after installing NodeJS, we install PM2
-- name: Install PM2 globally
-  community.general.npm:
-    name: pm2
-    global: yes
-  tags: pm2

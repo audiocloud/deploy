@@ -1,2 +1,2 @@
 dependencies:
-  - role: pm2
+  - role: common

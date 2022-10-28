@@ -4,6 +4,7 @@
     name: nats-server
     state: present
   when: ansible_os_family == "Darwin"
+## Start NATS
 - name: Start NATS
   command:
     cmd: brew services start nats-server

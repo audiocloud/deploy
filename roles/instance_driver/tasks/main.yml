@@ -10,13 +10,8 @@
   ansible.builtin.stat:
     path: "{{ instance_driver_path }}"
   register: instance_driver_path_stat
-- name: Download binary
-  ansible.builtin.get_url:
-    url: "https://github.com/audiocloud/audiocloud/releases/download/{{ instance_driver_version }}/audiocloud_driver-{{ rust_triple }}"
-    dest: "{{ instance_driver_path }}/audiocloud_driver"
-    mode: 0755
-  when: instance_driver_path_stat.stat.isdir is defined
-  notify: Restart instance driver
+- import_tasks: download_unix.yml
+  when: ansible_os_family != "Windows"
 - import_tasks: linux.yml
   when: ansible_os_family == "Linux"
 - import_tasks: darwin.yml

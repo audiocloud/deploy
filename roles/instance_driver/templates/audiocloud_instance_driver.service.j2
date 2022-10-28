@@ -4,10 +4,10 @@ Documentation=https://audiocloud.io
 After=network.target
 
 [Service]
-Environment=NATS_URL={{ audio_engine_nats_url }}
+Environment=NATS_URL={{ instance_driver_nats_url }}
 Type=simple
 User={{ user }}
-ExecStart={{ instance_driver_path }}/instance_driver
+ExecStart={{ instance_driver_path }}/instance_driver driver.yaml
 Restart=on-failure
 
 [Install]
