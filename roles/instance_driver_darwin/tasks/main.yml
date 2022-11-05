@@ -1,0 +1,8 @@
+- name: create or update launchd service plist
+  template:
+    src: io.audiocloud.instance_driver.plist.j2
+    dest: /Library/LaunchDaemons/io.audiocloud.instance_driver.plist
+    owner: root
+    mode: 0644
+  become: true
+  notify: restart_instance_driver

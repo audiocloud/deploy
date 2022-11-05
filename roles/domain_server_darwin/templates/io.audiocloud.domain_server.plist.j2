@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>Label</key>
+        <string>io.audiocloud.domain_server</string>
+        <key>LimitLoadToSessionType</key>
+        <array>
+            <string>Aqua</string>
+            <string>Background</string>
+            <string>LoginWindow</string>
+            <string>StandardIO</string>
+            <string>System</string>
+        </array>
+        <key>EnvironmentVariables</key>
+        <dict>
+            <key>NATS_URL</key>
+            <string>{{ nats_server_url }}</string>
+            <key>DOMAIN_ID</key>
+            <string>{{ domain_server_name }}</string>
+        </dict>
+        <key>WorkingDirectory</key>
+        <string>{{ domain_server_dir }}</string>
+        <key>ProgramArguments</key>
+        <array>
+            <string>{{ domain_server_bin }}</string>
+        </array>
+        <key>RunAtLoad</key>
+        <true />
+        <key>KeepAlive</key>
+        <dict>
+            <key>SuccessfulExit</key>
+            <false />
+        </dict>
+    </dict>
+</plist>

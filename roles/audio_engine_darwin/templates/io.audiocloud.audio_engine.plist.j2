@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>Label</key>
+        <string>io.audiocloud.audio_engine</string>
+        <key>LimitLoadToSessionType</key>
+        <array>
+            <string>Aqua</string>
+            <string>Background</string>
+            <string>LoginWindow</string>
+        </array>
+        <key>EnvironmentVariables</key>
+        <dict>
+            <key>NATS_URL</key>
+            <string>{{ nats_server_url }}</string>
+            <key>AUDIO_ENGINE_ID</key>
+            <string>{{ audio_engine_name }}</string>
+            <key>DOMAIN_SERVER_URL</key>
+            <string>{{ audio_engine_domain_url }}</string>
+        </dict>
+        <key>WorkingDirectory</key>
+        <string>{{ audio_engine_dir }}</string>
+        <key>ProgramArguments</key>
+        <array>
+            <string>{{ audio_engine_dir }}/REAPER.app/Contents/MacOS/REAPER</string>
+        </array>
+        <key>RunAtLoad</key>
+        <true />
+        <key>KeepAlive</key>
+        <dict>
+            <key>SuccessfulExit</key>
+            <false />
+        </dict>
+    </dict>
+</plist>

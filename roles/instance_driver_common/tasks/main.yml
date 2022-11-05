@@ -1,0 +1,13 @@
+- name: ensure instance driver directory exists
+  file:
+    path: "{{ instance_driver_dir }}"
+    state: directory
+    owner: "{{ ansible_user }}"
+    mode: 0755
+- name: create or update config file
+  template:
+    src: config.yaml.j2
+    dest: "{{ instance_driver_config_file }}"
+    owner: "{{ ansible_user }}"
+    mode: 0644
+  notify: restart_instance_driver

@@ -1,0 +1,47 @@
+all:
+  vars:
+    audiocloud_version: v0.1.9-alpha-4
+
+  hosts:
+    host:
+      ansible_host: 192.168.1.10 # host name or IP address that you can SSH into
+      ansible_user: audiocloud
+
+  children:
+    audio_engines:
+      hosts:
+        host:
+          audio_engine_input_device: Microphone
+          audio_engine_output_device: Speakers
+
+    instance_drivers:
+      roles:
+        - instance_driver
+      hosts:
+        host:
+          instance_driver_static_config:
+            instances:
+              manufacturer/model/name:
+                additional:
+                  config: "value"
+
+    domain_servers:
+      roles:
+        - domain_server
+      hosts:
+        host:
+          vars:
+            domain_server_public_domain_name: name.region.myaudioservice.com
+
+    load_balancer:
+      roles:
+        - load_balancer
+      hosts:
+        host:
+          load_balancer_admin_email: admin@myaudioservice.com
+
+    nats_servers:
+      roles:
+        - nats_server
+      hosts:
+        host:

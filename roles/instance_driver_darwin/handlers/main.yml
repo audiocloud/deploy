@@ -1,0 +1,5 @@
+- name: restart instance driver
+  listen: restart_instance_driver
+  become: true
+  ansible.builtin.command: |
+    launchctl stop io.audiocloud.instance_driver && launchctl start io.audiocloud.instance_driver

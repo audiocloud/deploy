@@ -1,0 +1,54 @@
+- name: ensure audio engine directory exists
+  file:
+    path: "{{ audio_engine_dir }}"
+    state: directory
+    owner: "{{ ansible_user }}"
+    mode: 0755
+  become: true
+  notify: restart_audio_engine
+# Download REAPER from official website
+- name: download REAPER installation media
+  ansible.builtin.get_url:
+    url: https://www.reaper.fm/files/6.x/reaper668_universal.dmg
+    dest: "{{ audio_engine_dir }}/REAPER.dmg"
+  notify: restart_audio_engine
+# Install REAPER
+- name: Mount and copy REAPER DMG
+  ansible.builtin.shell: |
+    TMPDIR="$(mktemp -d)"
+    trap 'rm -rf -- "$MYTMPDIR"' EXIT
+    yes y | hdiutil attach  -nobrowse -noverify -noautoopen -mountpoint ${TMPDIR} "{{ audio_engine_dir }}/REAPER.dmg"
+    cp -aR ${TMPDIR}/REAPER.app "{{ audio_engine_dir }}/"
+    chown -R {{ ansible_user_id }} "{{ audio_engine_dir }}/REAPER.app"
+    hdiutil detach ${TMPDIR}
+  creates: "{{ audio_engine_dir }}/REAPER.app"
+  become: true
+  notify: restart_audio_engine
+# Download the REAPER compatible VST plugin (audio engine) and install it
+- name: download audio engine binary
+  ansible.builtin.get_url:
+    url: "https://github.com/audiocloud/audiocloud/releases/download/{{ audiocloud_version }}/audiocloud_reaper_plugin-{{ architecture }}"
+    dest: "{{ audio_engine_dir }}/REAPER.app/Contents/Plugins/FX/ac_streaming_plugin.vst.dylib"
+    owner: "{{ ansible_user }}"
+    mode: 0755
+  become: true
+  notify: restart_audio_engine
+# Generate a REAPER configuration file
+- name: create or update REAPER configuration file
+  template:
+    src: reaper.ini.j2
+    # dest: "{{ audio_engine_dir }}/REAPER.app/Contents/Resources/reaper.ini"
+    dest: "{{ audio_engine_dir }}/reaper.ini"
+    owner: "{{ ansible_user }}"
+    mode: 0644
+  become: true
+  notify: restart_audio_engine
+# Generate a REAPER launchd configuration file
+- name: create or update REAPER launchd configuration file
+  template:
+    src: io.audiocloud.audio_engine.plist.j2
+    dest: /Library/LaunchDaemons/io.audiocloud.audio_engine.plist
+    owner: "{{ ansible_user }}"
+    mode: 0644
+  become: true
+  notify: restart_audio_engine

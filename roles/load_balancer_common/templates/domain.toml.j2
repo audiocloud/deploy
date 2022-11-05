@@ -1,0 +1,23 @@
+[http.routers]
+  [http.routers.domain-server-{{ item }}]
+    rule = "Host(`{{ item.domain_server_public_domain_name }}`)"
+    service = "domain-server-{{ item }}"
+    middlewares = ["domain-server-{{ item }}-rate-limit"]
+
+    [http.routers.domain-server-{{ item }}.tls]
+      certResolver = "letsencrypt"
+
+[http.middlewares]
+  [http.middlewares.domain-server-{{ item }}-rate-limit.rateLimit]
+    average = 50
+    burst = 100
+
+[http.services]
+  [http.services.domain-server-{{ item }}.loadBalancer]
+    serversTransport = "internal" # do not use TLS verification
+
+    [http.services.domain-server-{{ item }}.loadBalancer.sticky.cookie]
+    [http.services.domain-server-{{ item }}.loadBalancer.healthCheck]
+      path = "/healthz"
+    [[http.services.domain-server-{{ item }}.loadBalancer.servers]]
+      url = "https://{{ hostvars[item]['ansible_default_ipv4']['address'] }}:7200"

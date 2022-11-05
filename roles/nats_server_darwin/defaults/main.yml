@@ -1,0 +1,4 @@
+nats_server_dir: "/opt/homebrew/opt/nats-server"
+nats_server_data_dir: "{{ nats_server_dir }}/data"
+nats_server_config_file: "{{ nats_server_dir }}/nats.conf"
+nats_server_launchd_file: "{{ nats_server_dir }}/homebrew.mxcl.nats-server.plist"

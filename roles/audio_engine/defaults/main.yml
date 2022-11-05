@@ -1,6 +1,0 @@
-audio_engine_id: default
-audio_engine_path: /opt/audiocloud
-audio_engine_version: "{{ audiocloud_version }}"
-audio_engine_reaper_version: 668
-audio_engine_nats_url: nats://localhost:4222
-audio_engine_shared_media_root: "{{ audio_engine_path }}/media"

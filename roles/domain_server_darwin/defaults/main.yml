@@ -1,0 +1,4 @@
+domain_server_dir: /opt/audiocloud
+domain_server_bin: "{{ domain_server_dir }}/domain_server"
+domain_server_name: "{{ inventory_hostname }}"
+architecture: aarch64-apple-darwin

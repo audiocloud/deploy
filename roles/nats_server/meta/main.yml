@@ -1,0 +1,2 @@
+dependencies:
+  - role: "nats_server_{{ ansible_os_family|lower }}"

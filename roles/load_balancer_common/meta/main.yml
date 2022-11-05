@@ -1,0 +1,5 @@
+namespace: audiocloud.io
+name: load_balancer
+version: 0.1.0
+license:
+  - MIT

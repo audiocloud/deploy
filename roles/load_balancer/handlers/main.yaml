@@ -1,4 +1,0 @@
-- name: Restart traefik
-  ansible.builtin.command:
-    cmd: brew services restart traefik
-  when: ansible_os_family == "Darwin"

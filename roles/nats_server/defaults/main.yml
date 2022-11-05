@@ -1,0 +1,1 @@
+nats_server_url: "nats://{{ hostvars[groups['nats_servers'][0]]['ansible_default_ipv4']['address'] }}:4222"

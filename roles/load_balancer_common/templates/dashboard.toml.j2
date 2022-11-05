@@ -1,0 +1,12 @@
+[http.routers]
+  [http.routers.dashboard]
+    rule = "Host(`{{ load_balancer_dashboard_domain_name }}`)"
+    service = "api@internal"
+    middlewares = ["traefik-auth"]
+
+    [http.routers.dashboard.tls]
+      certResolver = "letsencrypt"
+
+[http.middlewares]
+  [http.middlewares.traefik-auth.basicAuth]
+  users = {{ load_balancer_dashboard_users|to_json }}

@@ -1,0 +1,39 @@
+- name: install NATS server
+  description: |
+    Install NATS server with homebrew package manager.
+  community.general.homebrew:
+    name: nats-server
+    state: present
+  notify: restart_nats_server
+
+- name: ensure NATS data directory exists
+  description: |
+    Ensure the NATS JetStream data directory exists. By default we keep up to 100 gigs on that directory.
+  ansible.builtin.file:
+    path: "{{ nats_server_data_dir }}"
+    state: directory
+    owner: "{{ ansible_user }}"
+    mode: 0755
+  notify: restart_nats_server
+
+- name: create or update NATS server config file
+  description: |
+    Update the NATS server configuration startup script to read the config file. Default homebrew package does
+    not use a configuration file, so we must create it.
+  ansible.builtin.template:
+    src: nats.conf.j2
+    dest: "{{ nats_server_config_file }}"
+    owner: "{{ ansible_user }}"
+    mode: 0755
+  notify: restart_nats_server
+
+- name: update NATS server launchd file
+  description: |
+    Update the NATS server launchd file to read the config file. Default homebrew package does
+    not use a configuration file, so we must update the launch configuration to use it.
+  ansible.builtin.template:
+    src: homebrew.mxcl.nats-server.plist.j2
+    dest: "{{ nats_server_launchd_file }}"
+    owner: "{{ ansible_user }}"
+    mode: 0755
+  notify: restart_nats_server

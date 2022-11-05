@@ -1,0 +1,18 @@
+- name: generate main config
+  description: |
+    Generate the main config file for the load balancer site.
+  ansible.builtin.template:
+    src: traefik.conf.j2
+    dest: "{{ load_balancer_config_dir }}/traefik.conf"
+  notify: restart_load_balancer
+
+- name: generate domain server configs
+  description: |
+    Generate the domain server configs for the load balancer. For every host in the domain, 
+    if its public_domain_name property is defined, the load balancer will expose it using a Host match rule.
+  ansible.builtin.template:
+    src: domain.conf.j2
+    dest: "{{ load_balancer_config_dir }}/domain-{{ item }}.conf"
+  when: item.public_domain_name is defined
+  loop: "{{ groups['domain_servers'] }}"
+  notify: restart_load_balancer

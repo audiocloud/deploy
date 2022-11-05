@@ -1,0 +1,5 @@
+- name: restart domain server
+  listen: restart_domain_server
+  become: true
+  ansible.builtin.command: |
+    launchctl stop io.audiocloud.domain_server && launchctl start io.audiocloud.domain_server

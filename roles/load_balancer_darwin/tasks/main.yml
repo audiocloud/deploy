@@ -1,0 +1,5 @@
+- name: install traefik load balancer
+  community.general.homebrew:
+    name: traefik
+    state: present
+  notify: restart_load_balancer

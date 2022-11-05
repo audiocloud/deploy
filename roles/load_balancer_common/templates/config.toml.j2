@@ -1,0 +1,31 @@
+[entryPoints]
+  [entryPoints.http]
+    address = ":80"
+  [entryPoints.https]
+    address = ":443"
+
+[certificatesResolvers.letsencrypt.acme]
+  email = "{{ load_balancer_admin_email }}"
+  storage = "{{ load_balancer_acme_cert_json }}"
+  [certificatesResolvers.letsencrypt.acme.httpChallenge]
+    # used during the challenge
+    entryPoint = "http"
+
+[api]
+  dashboard = true
+
+[log]
+  level = "DEBUG"
+
+[accessLog]
+
+[metrics]
+  [metrics.prometheus]
+
+[providers]
+  [providers.file]
+    directory = "{{ load_balancer_config_sites }}"
+    watch = true
+
+[http.serversTransports.internal]
+  insecureSkipVerify = true

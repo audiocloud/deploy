@@ -1,0 +1,9 @@
+- name: create or update systemd unit for instance driver
+  template:
+    src: instance_driver.service.j2
+    dest: /etc/systemd/system/instance_driver.service
+    owner: root
+    group: root
+    mode: 0644
+  become: true
+  notify: restart_instance_driver

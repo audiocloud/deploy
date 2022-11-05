@@ -1,0 +1,5 @@
+- name: restart traefik load balancer
+  ansible.builtin.command: |
+    brew services restart traefiks
+  become: true
+  listen: restart_load_balancer

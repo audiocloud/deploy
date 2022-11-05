@@ -1,6 +1,0 @@
-# Install homebrew
-- name: Install Homebrew
-  ansible.builtin.command:
-    cmd: |
-      /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    creates: /opt/homebrew/bin/brew
