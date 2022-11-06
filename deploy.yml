@@ -1,0 +1,23 @@
+# This is an ansible playbook to deploy audiocloud domain on a set of servers
+# Each domain must comprise of at least a domain server, one audio engine and a NATS server, but it
+# could also have a load balancer (which is necessary to open the audiocloud domain to the public)
+# additional audio engines and or or more instance drivers.
+
+- name: Check settings
+  hosts: localhost
+  tasks:
+    - name: Check settings
+      ansible.builtin.assert:
+        that:
+          - (groups['nats_server']|length) <= 1
+          - (groups['load_balancer']|length) <= 1
+
+- name: Deploy nats server
+  hosts: nats_server
+  gather_facts: true
+  roles: [nats_server]
+
+- name: Deploy load balancer
+  hosts: load_balancer
+  gather_facts: true
+  roles: [load_balancer]

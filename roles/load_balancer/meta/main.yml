@@ -8,4 +8,5 @@ galaxy_info:
       versions:
         - all
 dependencies:
-  - role: "load_balancer_{{ ansible_os_family|lower }}"
+  - role: load_balancer_darwin
+    when: ansible_os_family == "Darwin"

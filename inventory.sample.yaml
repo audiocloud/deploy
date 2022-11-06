@@ -15,8 +15,6 @@ all:
           audio_engine_output_device: Speakers
 
     instance_drivers:
-      roles:
-        - instance_driver
       hosts:
         host:
           instance_driver_static_config:
@@ -26,22 +24,16 @@ all:
                   config: "value"
 
     domain_servers:
-      roles:
-        - domain_server
       hosts:
         host:
           vars:
             domain_server_public_domain_name: name.region.myaudioservice.com
 
     load_balancer:
-      roles:
-        - load_balancer
       hosts:
         host:
           load_balancer_admin_email: admin@myaudioservice.com
 
-    nats_servers:
-      roles:
-        - nats_server
+    nats_server:
       hosts:
         host:

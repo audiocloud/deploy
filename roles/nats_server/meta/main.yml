@@ -8,4 +8,5 @@ galaxy_info:
       versions:
         - all
 dependencies:
-  - role: "nats_server_{{ ansible_os_family|lower }}"
+  - role: nats_server_darwin
+    when: ansible_os_family == "Darwin"
