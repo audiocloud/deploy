@@ -6,18 +6,33 @@
 - name: Check settings
   hosts: localhost
   tasks:
-    - name: Check settings
+    - name: Exactly one NATS server must be defined or "externa_nats_url" must be provided
       ansible.builtin.assert:
         that:
-          - (groups['nats_server']|length) <= 1
+          - (groups['nats_server']|length) == 1 or externa_nats_url is defined
+
+    - name: No more than one load balancer can be defined
+      ansible.builtin.assert:
+        that:
           - (groups['load_balancer']|length) <= 1
 
-- name: Deploy nats server
+    - name: At least one audio engine must be defined (or no processing can take place)
+      ansible.builtin.assert:
+        that:
+          - (groups['audio_engines']|length) >= 1
+
+- name: Deploy NATS messaging server
   hosts: nats_server
-  gather_facts: true
-  roles: [nats_server]
+  tasks:
+    - name: "Apply NATS server role to {{ inventory_hostname }}"
+      ansible.builtin.include_role:
+        name: server
+      when: "skip_nats_server is not defined"
 
 - name: Deploy load balancer
   hosts: load_balancer
-  gather_facts: true
-  roles: [load_balancer]
+  tasks:
+    - name: "Apply load balancer role to {{ inventory_hostname }}"
+      ansible.builtin.include_role:
+        name: load_balancer
+      when: "skip_load_balancer is not defined"

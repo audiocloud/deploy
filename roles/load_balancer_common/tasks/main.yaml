@@ -1,18 +1,42 @@
+# Ensure certs directory exists and has correct permissions
+- name: Ensure certs directory
+  ansible.builtin.file:
+    path: "{{ load_balancer_config_dir }}/certs"
+    state: directory
+    mode: 0755
+  notify: restart_load_balancer
+
+# Ensure sites directory exists and has correct permissions
+- name: Ensure sites directory
+  ansible.builtin.file:
+    path: "{{ load_balancer_config_dir }}/sites"
+    state: directory
+    mode: 0755
+  notify: restart_load_balancer
+
 # Generate the main config file for the load balancer site.
 - name: Generate main config
   ansible.builtin.template:
-    src: traefik.conf.j2
-    dest: "{{ load_balancer_config_dir }}/traefik.conf"
+    src: traefik.toml.j2
+    dest: "{{ load_balancer_config_dir }}/traefik.toml"
+    mode: 0644
+  notify: restart_load_balancer
+
+# Generate dasboard configuration for the load balancer site.
+- name: Generate dashboard site config
+  ansible.builtin.template:
+    src: dashboard.toml.j2
+    dest: "{{ load_balancer_config_dir }}/sites/dashboard.toml"
     mode: 0644
   notify: restart_load_balancer
 
 # Generate the domain server configs for the load balancer. For every host in the domain,
 # if its public_domain_name property is defined, the load balancer will expose it using a Host match rule.
-- name: Generate domain server configs
+- name: Generate domain server site configs
   ansible.builtin.template:
-    src: domain.conf.j2
-    dest: "{{ load_balancer_config_dir }}/domain-{{ item }}.conf"
+    src: domain_server.toml.j2
+    dest: "{{ load_balancer_config_dir }}/domain-{{ item }}.toml"
     mode: 0644
-  when: item.public_domain_name is defined
+  when: hostvars[item].domain_server_public_domain_name is defined
   loop: "{{ groups['domain_servers'] }}"
   notify: restart_load_balancer

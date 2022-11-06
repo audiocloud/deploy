@@ -1,0 +1,3 @@
+load_balancer_config_sites: "{{ load_balancer_config_dir }}/sites"
+load_balancer_acme_cert_json: "{{ load_balancer_config_dir }}/certs/acme.json"
+load_balancer_config_file: "{{ load_balancer_config_dir }}/config.toml"

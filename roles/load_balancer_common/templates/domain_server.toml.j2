@@ -1,6 +1,6 @@
 [http.routers]
   [http.routers.domain-server-{{ item }}]
-    rule = "Host(`{{ item.domain_server_public_domain_name }}`)"
+    rule = "Host(`{{ hostvars[item].domain_server_public_domain_name }}`)"
     service = "domain-server-{{ item }}"
     middlewares = ["domain-server-{{ item }}-rate-limit"]
 

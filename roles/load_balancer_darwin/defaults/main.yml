@@ -1,3 +1,1 @@
-load_balancer_config_sites: /opt/homebrew/etc/traefik/sites
-load_balancer_acme_cert_json: /opt/homebrew/etc/traefik/certs/acme.json
-load_balancer_config_file: /opt/homebrew/etc/traefik/config.toml
+load_balancer_config_dir: /opt/homebrew/etc/traefik
