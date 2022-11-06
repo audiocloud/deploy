@@ -1,0 +1,1 @@
+loki_server_url: "http://{{ hostvars[groups['loki_server'][0]]['ansible_default_ipv4']['address'] }}:3100"

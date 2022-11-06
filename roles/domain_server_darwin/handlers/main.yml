@@ -1,5 +1,7 @@
+# We are OK with stop failing, because on first boot it does not exist yet
 - name: Restart domain server
   listen: restart_domain_server
   become: true
-  ansible.builtin.command: |
-    launchctl stop io.audiocloud.domain_server && launchctl start io.audiocloud.domain_server
+  ansible.builtin.shell: |
+    launchctl stop io.audiocloud.domain_server || true
+    launchctl start io.audiocloud.domain_server

@@ -1,0 +1,6 @@
+# Restart the loki logging service.
+- name: Restart loki server
+  ansible.builtin.command:
+    cmd: |
+      brew services restart loki
+  listen: restart_loki_server

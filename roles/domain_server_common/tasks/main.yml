@@ -7,12 +7,22 @@
     mode: 0755
   become: true
 
+# Ensure the domain server logs directory exists and is accessible (writable).
+- name: Ensure domain server logging directory exists (if specified)
+  ansible.builtin.file:
+    path: "{{ domain_server_logs_dir }}"
+    state: directory
+    owner: "{{ ansible_user }}"
+    mode: 0755
+  become: true
+  when: domain_server_logs_dir is defined
+
 # Ensure the domain server binary is downloaded and executable.
 - name: Ensure domain server binary
   ansible.builtin.get_url:
-    url: >-
-      https://github.com/audiocloud/audiocloud/releases/download/
-      {{ audiocloud_version }}/audiocloud_domain_server-{{ architecture }}{{ architecture_bin_ext }}
+    url:
+      "https://github.com/audiocloud/audiocloud/releases/download/{{ audiocloud_version }}\
+      /audiocloud_domain_server-{{ architecture }}{{ architecture_bin_ext }}"
     dest: "{{ domain_server_bin }}"
     owner: "{{ ansible_user }}"
     mode: 0755

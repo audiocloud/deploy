@@ -3,13 +3,30 @@
 # could also have a load balancer (which is necessary to open the audiocloud domain to the public)
 # additional audio engines and or or more instance drivers.
 
+- name: Include all .yml files in "vars" and all nested directories
+  hosts:
+    - all
+    - localhost
+  gather_facts: true
+  tasks:
+    - name: Include all .yml files in "vars" and all nested directories
+      ansible.builtin.include_vars:
+        dir: vars
+        extensions:
+          - "yml"
+
 - name: Check settings
   hosts: localhost
   tasks:
-    - name: Exactly one NATS server must be defined or "externa_nats_url" must be provided
+    - name: Exactly one NATS server must be defined or "nats_server_url" must be provided
       ansible.builtin.assert:
         that:
-          - (groups['nats_server']|length) == 1 or externa_nats_url is defined
+          - ((groups['nats_server']|length) == 1) or ((groups['nats_server']|length) == 0 and nats_server_url is defined)
+
+    - name: Exactly one loki server must be defined or "loki_server_url" must be provided
+      ansible.builtin.assert:
+        that:
+          - ((groups['loki_server']|length) == 1) or ((groups['loki_server']|length) == 0 and loki_server_url is defined)
 
     - name: No more than one load balancer can be defined
       ansible.builtin.assert:
@@ -20,14 +37,30 @@
       ansible.builtin.assert:
         that:
           - (groups['audio_engines']|length) >= 1
+    - name: NATS URL is defined
+      ansible.builtin.assert:
+        that:
+          - nats_server_url is defined
+    - name: Loki URL is defined
+      ansible.builtin.assert:
+        that:
+          - loki_server_url is defined
 
 - name: Deploy NATS messaging server
   hosts: nats_server
   tasks:
     - name: "Apply NATS server role to {{ inventory_hostname }}"
       ansible.builtin.include_role:
-        name: server
+        name: nats_server
       when: "skip_nats_server is not defined"
+
+- name: Deploy loki logging server
+  hosts: loki_server
+  tasks:
+    - name: "Apply loki server role to {{ inventory_hostname }}"
+      ansible.builtin.include_role:
+        name: loki_server
+      when: "skip_loki_server is not defined"
 
 - name: Deploy load balancer
   hosts: load_balancer
@@ -36,3 +69,11 @@
       ansible.builtin.include_role:
         name: load_balancer
       when: "skip_load_balancer is not defined"
+
+- name: Deploy domain servers
+  hosts: domain_servers
+  tasks:
+    - name: "Apply domain server role to {{ inventory_hostname }}"
+      ansible.builtin.include_role:
+        name: domain_server
+      when: "skip_domain_server is not defined"

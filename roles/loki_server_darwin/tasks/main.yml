@@ -1,0 +1,6 @@
+# Install NATS server with homebrew package manager.
+- name: Install loki server
+  community.general.homebrew:
+    name: loki
+    state: present
+  notify: restart_loki_server
