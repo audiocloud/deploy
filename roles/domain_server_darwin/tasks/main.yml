@@ -1,6 +1,7 @@
-- name: generate launchd configuration
+- name: Generate launchd configuration
   ansible.builtin.template:
     src: io.audiocloud.domain_server.plist.j2
     dest: /Library/LaunchDaemons/io.audiocloud.domain_server.plist
+    mode: 0644
   become: true
   notify: restart_domain_server

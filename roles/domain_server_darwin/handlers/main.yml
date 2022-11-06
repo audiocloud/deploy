@@ -1,4 +1,4 @@
-- name: restart domain server
+- name: Restart domain server
   listen: restart_domain_server
   become: true
   ansible.builtin.command: |

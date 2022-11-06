@@ -1,2 +1,14 @@
+galaxy_info:
+  description: Instance Server
+  author: Bojan Šernek
+  min_ansible_version: "2.9"
+  license: MIT
+  platforms:
+    - name: macOS
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - all
 dependencies:
   - role: "instance_driver_{{ ansible_os_family|lower }}"

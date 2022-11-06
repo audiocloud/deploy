@@ -1,5 +1,5 @@
-- name: restart instance driver with systemctl
-  systemd:
+- name: Restart instance driver with systemctl
+  ansible.builtin.systemd:
     name: instance_driver
     state: restarted
   become: true

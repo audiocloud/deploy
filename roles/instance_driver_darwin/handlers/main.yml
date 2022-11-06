@@ -1,4 +1,4 @@
-- name: restart instance driver
+- name: Restart instance driver
   listen: restart_instance_driver
   become: true
   ansible.builtin.command: |

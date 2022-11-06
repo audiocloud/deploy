@@ -3,3 +3,15 @@ name: load_balancer
 version: 0.1.0
 license:
   - MIT
+galaxy_info:
+  description: Load Balancer Common
+  author: Bojan Šernek
+  min_ansible_version: "2.9"
+  license: MIT
+  platforms:
+    - name: macOS
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - all

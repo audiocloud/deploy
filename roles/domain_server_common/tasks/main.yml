@@ -1,5 +1,5 @@
 # Ensure the domain server directory exists and is accessible (writable).
-- name: ensure domain server directory exists
+- name: Ensure domain server directory exists
   ansible.builtin.file:
     path: "{{ domain_server_dir }}"
     state: directory
@@ -8,9 +8,11 @@
   become: true
 
 # Ensure the domain server binary is downloaded and executable.
-- name: ensure domain server binary
+- name: Ensure domain server binary
   ansible.builtin.get_url:
-    url: "https://github.com/audiocloud/audiocloud/releases/download/{{ audiocloud_version }}/audiocloud_domain_server-{{ architecture }}{{ architecture_bin_ext }}"
+    url: >-
+      https://github.com/audiocloud/audiocloud/releases/download/
+      {{ audiocloud_version }}/audiocloud_domain_server-{{ architecture }}{{ architecture_bin_ext }}
     dest: "{{ domain_server_bin }}"
     owner: "{{ ansible_user }}"
     mode: 0755

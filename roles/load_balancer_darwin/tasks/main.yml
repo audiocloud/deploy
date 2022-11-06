@@ -1,4 +1,4 @@
-- name: install traefik load balancer
+- name: Install traefik load balancer
   community.general.homebrew:
     name: traefik
     state: present

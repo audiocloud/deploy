@@ -1,11 +1,11 @@
-- name: ensure instance driver directory exists
-  file:
+- name: Ensure instance driver directory exists
+  ansible.builtin.file:
     path: "{{ instance_driver_dir }}"
     state: directory
     owner: "{{ ansible_user }}"
     mode: 0755
-- name: create or update config file
-  template:
+- name: Create or update config file
+  ansible.builtin.template:
     src: config.yaml.j2
     dest: "{{ instance_driver_config_file }}"
     owner: "{{ ansible_user }}"

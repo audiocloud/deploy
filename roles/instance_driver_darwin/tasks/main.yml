@@ -1,5 +1,5 @@
-- name: create or update launchd service plist
-  template:
+- name: Create or update launchd service plist
+  ansible.builtin.template:
     src: io.audiocloud.instance_driver.plist.j2
     dest: /Library/LaunchDaemons/io.audiocloud.instance_driver.plist
     owner: root
