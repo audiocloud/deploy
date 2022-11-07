@@ -26,8 +26,7 @@ all:
     domain_servers:
       hosts:
         host:
-          vars:
-            domain_server_public_domain_name: name.region.myaudioservice.com
+          domain_server_public_domain_name: name.region.myaudioservice.com
 
     load_balancer:
       hosts:
