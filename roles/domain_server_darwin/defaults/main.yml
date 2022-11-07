@@ -1,5 +1,6 @@
 domain_server_dir: /opt/audiocloud
 domain_server_bin: "{{ domain_server_dir }}/domain_server"
+domain_server_conf: "{{ domain_server_dir }}/config.yaml"
 domain_server_name: "{{ inventory_hostname }}"
 architecture: aarch64-apple-darwin
 architecture_bin_ext: ""

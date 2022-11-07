@@ -17,7 +17,7 @@
   become: true
   when: domain_server_logs_dir is defined
 
-# Ensure the domain server binary is downloaded and executable.
+# Ensure the domain server models directory exists and is accessible (writable).
 - name: Ensure domain server binary
   ansible.builtin.get_url:
     url:
@@ -27,3 +27,28 @@
     owner: "{{ ansible_user }}"
     mode: 0755
   become: true
+  notify: restart_domain_server
+
+# Download models and ensure they are accessible (readable).
+- name: Download and extract models
+  ansible.builtin.unarchive:
+    remote_src: true
+    keep_newer: true
+    src:
+      "https://github.com/audiocloud/audiocloud/releases/download/{{ audiocloud_version }}\
+      /models.zip"
+    dest: "{{ domain_server_dir }}"
+    owner: "{{ ansible_user }}"
+    mode: 0755
+  become: true
+  notify: restart_domain_server
+
+# Generate config file
+- name: Generate domain server config file
+  ansible.builtin.template:
+    src: config.yaml.j2
+    dest: "{{ domain_server_conf }}"
+    owner: "{{ ansible_user }}"
+    mode: 0644
+  become: true
+  notify: restart_domain_server
