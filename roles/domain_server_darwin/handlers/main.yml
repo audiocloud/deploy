@@ -3,6 +3,5 @@
   listen: restart_domain_server
   become: true
   ansible.builtin.shell: |
-    launchctl load /Library/LaunchDaemons/io.audiocloud.domain_server.plist
-    launchctl stop io.audiocloud.domain_server
-    launchctl start io.audiocloud.domain_server
+    launchctl unload /Library/LaunchDaemons/io.audiocloud.domain_server.plist
+    launchctl load -w /Library/LaunchDaemons/io.audiocloud.domain_server.plist

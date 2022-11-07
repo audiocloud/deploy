@@ -2,6 +2,5 @@
   listen: restart_instance_driver
   become: true
   ansible.builtin.shell: |
-    launchctl load /Library/LaunchDaemons/io.audiocloud.instance_driver.plist
-    launchctl stop io.audiocloud.instance_driver
-    launchctl start io.audiocloud.instance_driver
+    launchctl unload /Library/LaunchDaemons/io.audiocloud.instance_driver.plist
+    launchctl load -w /Library/LaunchDaemons/io.audiocloud.instance_driver.plist

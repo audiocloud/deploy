@@ -8,4 +8,5 @@ galaxy_info:
       versions:
         - all
 dependencies:
-  - role: "audio_engine_{{ ansible_os_family|lower }}"
+  - role: audio_engine_darwin
+    when: ansible_os_family == "Darwin"

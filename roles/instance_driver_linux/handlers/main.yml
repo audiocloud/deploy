@@ -2,5 +2,6 @@
   ansible.builtin.systemd:
     name: audiocloud_instance_driver
     state: restarted
+    daemon_reload: yes
   become: true
   listen: restart_instance_driver

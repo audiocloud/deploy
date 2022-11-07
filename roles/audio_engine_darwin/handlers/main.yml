@@ -2,6 +2,5 @@
   listen: restart_audio_engine
   become: true
   ansible.builtin.shell: |
-    launchctl load /Library/LaunchDaemons/io.audiocloud.audio_engine.plist
-    launchctl stop io.audiocloud.audio_engine
-    launchctl start io.audiocloud.audio_engine
+    launchctl unload /Library/LaunchDaemons/io.audiocloud.audio_engine.plist 
+    launchctl load -w /Library/LaunchDaemons/io.audiocloud.audio_engine.plist
