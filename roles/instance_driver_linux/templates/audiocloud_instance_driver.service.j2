@@ -1,0 +1,18 @@
+[Unit]
+Description="Audiocloud Instance Driver {{ audiocloud_version }}"
+Documentation=https://audiocloud.io
+After=network.target
+
+[Service]
+Environment=NATS_URL={{ nats_server_url }}
+Environment=LOKI_URL={{ loki_server_url }}
+Environment=DRIVER_ID={{ instance_driver_name }}
+Environment=DOMAIN_SERVER_URL={{ instance_driver_domain_url }}
+Type=simple
+User={{ ansible_user }}
+ExecStart={{ instance_driver_bin }} {{ instance_driver_config_file }}
+Restart=on-failure
+WorkingDirectory={{ instance_driver_dir }}
+
+[Install]
+WantedBy=multi-user.target

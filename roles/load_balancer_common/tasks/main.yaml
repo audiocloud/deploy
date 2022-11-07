@@ -35,8 +35,8 @@
 - name: Generate domain server site configs
   ansible.builtin.template:
     src: domain_server.toml.j2
-    dest: "{{ load_balancer_config_dir }}/domain-{{ item }}.toml"
+    dest: "{{ load_balancer_config_dir }}/sites/domain-{{ item }}.toml"
     mode: 0644
   when: hostvars[item].domain_server_public_domain_name is defined
-  loop: "{{ groups['domain_servers'] }}"
+  loop: "{{ query('inventory_hostnames', 'domain_servers') }}"
   notify: restart_load_balancer

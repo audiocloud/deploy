@@ -1,4 +1,4 @@
 instance_driver_name: "{{ inventory_hostname }}"
-instance_driver_domain_url: "https://{{ hostvars[instance_driver_domain_name]['ansible_default_ipv4']['address'] }}:7200"
-instance_driver_config_file: "{{ instance_driver_dir }}/config.yaml"
+instance_driver_domain_url: "https://{{ hostvars[instance_driver_domain_server]['ansible_default_ipv4']['address'] }}:7200"
+instance_driver_config_file: "{{ instance_driver_dir }}/driver.yaml"
 instance_driver_static_config: {}

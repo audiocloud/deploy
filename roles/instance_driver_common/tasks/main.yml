@@ -4,6 +4,7 @@
     state: directory
     owner: "{{ ansible_user }}"
     mode: 0755
+  become: true
 - name: Create or update config file
   ansible.builtin.template:
     src: config.yaml.j2
@@ -11,3 +12,4 @@
     owner: "{{ ansible_user }}"
     mode: 0644
   notify: restart_instance_driver
+  become: true

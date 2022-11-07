@@ -1,6 +1,6 @@
 - name: Restart instance driver with systemctl
   ansible.builtin.systemd:
-    name: instance_driver
+    name: audiocloud_instance_driver
     state: restarted
   become: true
   listen: restart_instance_driver

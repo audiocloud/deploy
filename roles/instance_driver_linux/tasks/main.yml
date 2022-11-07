@@ -1,7 +1,7 @@
 - name: Create or update systemd unit for instance driver
   ansible.builtin.template:
-    src: instance_driver.service.j2
-    dest: /etc/systemd/system/instance_driver.service
+    src: audiocloud_instance_driver.service.j2
+    dest: /etc/systemd/system/audiocloud_instance_driver.service
     owner: root
     group: root
     mode: 0644

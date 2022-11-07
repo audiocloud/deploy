@@ -21,3 +21,6 @@
       path = "/healthz"
     [[http.services.domain-server-{{ item }}.loadBalancer.servers]]
       url = "https://{{ hostvars[item]['ansible_default_ipv4']['address'] }}:7200"
+
+[http.serversTransports.internal]
+  insecureSkipVerify = true
