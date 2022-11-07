@@ -18,6 +18,10 @@
             <string>{{ audio_engine_name }}</string>
             <key>DOMAIN_SERVER_URL</key>
             <string>{{ audio_engine_domain_url }}</string>
+            <key>NATS_CMD_TOPIC</key>
+            <string>ac.aeng.{{ audio_engine_name }}.cmd</string>
+            <key>NATS_EVT_TOPIC</key>
+            <string>ac.aeng.{{ audio_engine_name }}.evt</string>
         </dict>
         <key>WorkingDirectory</key>
         <string>{{ audio_engine_dir }}</string>

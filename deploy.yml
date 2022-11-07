@@ -91,3 +91,11 @@
       ansible.builtin.include_role:
         name: instance_driver
       when: "skip_instance_drivers is not defined"
+
+- name: Deploy audio engines
+  hosts: audio_engines
+  tasks:
+    - name: "Apply audio engine role to {{ inventory_hostname }}"
+      ansible.builtin.include_role:
+        name: audio_engine
+      when: "skip_audio_engines is not defined"

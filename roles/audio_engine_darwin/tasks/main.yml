@@ -29,7 +29,9 @@
 # Download the REAPER compatible VST plugin (audio engine) and install it
 - name: Download audio engine binary
   ansible.builtin.get_url:
-    url: "https://github.com/audiocloud/audiocloud/releases/download/{{ audiocloud_version }}/audiocloud_reaper_plugin-{{ architecture }}"
+    url:
+      "https://github.com/audiocloud/audiocloud/releases/download/{{ audiocloud_version }}\
+      /audiocloud_reaper_plugin-{{ architecture }}"
     dest: "{{ audio_engine_dir }}/REAPER.app/Contents/Plugins/FX/ac_streaming_plugin.vst.dylib"
     owner: "{{ ansible_user }}"
     mode: 0755
@@ -50,6 +52,24 @@
   ansible.builtin.template:
     src: io.audiocloud.audio_engine.plist.j2
     dest: /Library/LaunchDaemons/io.audiocloud.audio_engine.plist
+    owner: "{{ ansible_user }}"
+    mode: 0644
+  become: true
+  notify: restart_audio_engine
+# Generate license file
+- name: Create or update REAPER license file
+  ansible.builtin.template:
+    src: reaper-license.rk.j2
+    dest: "{{ audio_engine_dir }}/reaper-license.rk"
+    owner: "{{ ansible_user }}"
+    mode: 0644
+  become: true
+  notify: restart_audio_engine
+# Generate reaper INI config file
+- name: Create or update REAPER config file
+  ansible.builtin.template:
+    src: reaper.ini.j2
+    dest: "{{ audio_engine_dir }}/reaper.ini"
     owner: "{{ ansible_user }}"
     mode: 0644
   become: true

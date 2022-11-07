@@ -130,4 +130,9 @@ dmypy.json
 
 inventory.yaml
 
+# certificates 
 *.pem
+*.key
+
+# REAPER license files
+*.rk 
