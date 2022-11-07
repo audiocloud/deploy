@@ -1,8 +1,3 @@
 # audiocloud deployment
 
-need to document this.
-
-TODO:
-
-- how to import this into ansible. Releases, ansible-lint?
-- how to prepare inventory
+need to upgrade this to a galaxy collection so it can be imported easily.
