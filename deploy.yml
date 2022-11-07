@@ -20,29 +20,35 @@
   tasks:
     - name: Exactly one NATS server must be defined or "nats_server_url" must be provided
       ansible.builtin.assert:
+        quiet: true
         that:
           - ((groups['nats_server']|length) == 1) or ((groups['nats_server']|length) == 0 and nats_server_url is defined)
 
     - name: Exactly one loki server must be defined or "loki_server_url" must be provided
       ansible.builtin.assert:
+        quiet: true
         that:
           - ((groups['loki_server']|length) == 1) or ((groups['loki_server']|length) == 0 and loki_server_url is defined)
 
     - name: No more than one load balancer can be defined
       ansible.builtin.assert:
+        quiet: true
         that:
           - (groups['load_balancer']|length) <= 1
 
     - name: At least one audio engine must be defined (or no processing can take place)
       ansible.builtin.assert:
+        quiet: true
         that:
           - (groups['audio_engines']|length) >= 1
     - name: NATS URL is defined
       ansible.builtin.assert:
+        quiet: true
         that:
           - nats_server_url is defined
     - name: Loki URL is defined
       ansible.builtin.assert:
+        quiet: true
         that:
           - loki_server_url is defined
 
@@ -76,4 +82,12 @@
     - name: "Apply domain server role to {{ inventory_hostname }}"
       ansible.builtin.include_role:
         name: domain_server
-      when: "skip_domain_server is not defined"
+      when: "skip_domain_servers is not defined"
+
+- name: Deploy instance drivers
+  hosts: instance_drivers
+  tasks:
+    - name: "Apply instance driver role to {{ inventory_hostname }}"
+      ansible.builtin.include_role:
+        name: instance_driver
+      when: "skip_instance_drivers is not defined"
