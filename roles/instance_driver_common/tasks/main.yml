@@ -13,3 +13,14 @@
     mode: 0644
   notify: restart_instance_driver
   become: true
+# Ensure the instance driver binary is downloaded and executable
+- name: Ensure domain server binary
+  ansible.builtin.get_url:
+    url:
+      "https://github.com/audiocloud/audiocloud/releases/download/{{ audiocloud_version }}\
+      /audiocloud_driver-{{ architecture }}{{ architecture_bin_ext }}"
+    dest: "{{ instance_driver_bin }}"
+    owner: "{{ ansible_user }}"
+    mode: 0755
+  become: true
+  notify: restart_instance_driver

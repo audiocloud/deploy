@@ -1,2 +1,4 @@
 instance_driver_dir: /opt/audiocloud
 instance_driver_bin: "{{ instance_driver_dir }}/instance_driver"
+architecture: x86_64-unknown-linux-gnu
+architecture_bin_ext: ""

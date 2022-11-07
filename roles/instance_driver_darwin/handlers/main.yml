@@ -1,6 +1,7 @@
 - name: Restart instance driver
   listen: restart_instance_driver
   become: true
-  ansible.builtin.command: |
+  ansible.builtin.shell: |
+    launchclt load /Library/LaunchDaemons/io.audiocloud.instance_driver.plist
     launchctl stop io.audiocloud.instance_driver
     launchctl start io.audiocloud.instance_driver
